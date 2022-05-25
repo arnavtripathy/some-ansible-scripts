@@ -1,0 +1,21 @@
+#Comment lines from pgp install to starting zabbix agent in the ~/.ansible/roles/dj-wasabi.zabbix-agent/tasks/Debian.yml
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Installing zabbix from apt
+      shell: |
+        wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+focal_all.deb
+        sudo dpkg -i zabbix-release_5.0-1+focal_all.deb
+        sudo apt-get update -y
+        sudo apt-get install zabbix-agent -y 
+  roles:
+     - role: dj-wasabi.zabbix-agent
+       zabbix_agent_server: $IP
+       zabbix_agent_serveractive: $IP
+       zabbix_url: $URL
+       zabbix_api_use: true # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
+       zabbix_api_user: $USER
+       zabbix_api_pass: $PASSWORD
+       zabbix_api_create_hosts: True
+       zabbix_create_host_groups:
+         - Linux servers
